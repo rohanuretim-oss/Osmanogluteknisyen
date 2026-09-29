@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Osmanoğlu Teknik - Giriş</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    min-height:100vh;
+    background:#f4f7fb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.container{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    background:white;
+}
+
+.left{
+    width:50%;
+    background:linear-gradient(135deg,#071a35,#0b4f91);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:50px;
+}
+
+.brand{
+    max-width:470px;
+}
+
+.logo{
+    width:78px;
+    height:78px;
+    border-radius:18px;
+    background:rgba(255,255,255,.1);
+    border:2px solid rgba(255,255,255,.25);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    font-weight:800;
+    margin-bottom:25px;
+}
+
+.brand h1{
+    font-size:42px;
+    margin-bottom:15px;
+}
+
+.brand p{
+    color:#d8e7f8;
+    font-size:17px;
+    line-height:1.7;
+}
+
+.right{
+    width:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:30px;
+}
+
+.card{
+    width:100%;
+    max-width:420px;
+}
+
+.card h2{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    color:#718096;
+    margin-bottom:30px;
+}
+
+.group{
+    margin-bottom:18px;
+}
+
+.group label{
+    display:block;
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.group input{
+    width:100%;
+    height:52px;
+    border:1px solid #d7deea;
+    border-radius:12px;
+    padding:0 15px;
+    outline:none;
+}
+
+.group input:focus{
+    border-color:#0b67ad;
+    box-shadow:0 0 0 3px rgba(11,103,173,.1);
+}
+
+.password{
+    position:relative;
+}
+
+.password input{
+    padding-right:70px;
+}
+
+.show{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    border:0;
+    background:none;
+    color:#0b67ad;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:700;
+}
+
+.login{
+    width:100%;
+    height:52px;
+    border:0;
+    border-radius:12px;
+    background:#0b67ad;
+    color:white;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.login:disabled{
+    opacity:.7;
+}
+
+.message{
+    min-height:25px;
+    margin-top:15px;
+    text-align:center;
+    color:#c62828;
+    font-size:14px;
+}
+
+@media(max-width:800px){
+    .container{display:block}
+
+    .left{
+        width:100%;
+        min-height:35vh;
+        padding:35px 25px;
+    }
+
+    .brand h1{
+        font-size:30px;
+    }
+
+    .brand p{
+        font-size:14px;
+    }
+
+    .right{
+        width:100%;
+        padding:35px 22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="left">
+        <div class="brand">
+            <div class="logo">OT</div>
+
+            <h1>Osmanoğlu Teknik</h1>
+
+            <p>
+                Teknik servis operasyonlarınızı,
+                personel girişlerinizi ve servis taleplerinizi
+                tek bir sistem üzerinden yönetin.
+            </p>
+        </div>
+    </div>
+
+    <div class="right">
+
+        <div class="card">
+
+            <h2>Personel Girişi</h2>
+
+            <p class="subtitle">
+                Sisteme devam etmek için hesabınızla giriş yapın.
+            </p>
+
+            <form id="loginForm">
+
+                <div class="group">
+                    <label>E-posta</label>
+
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="E-posta adresiniz"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="group">
+
+                    <label>Şifre</label>
+
+                    <div class="password">
+
+                        <input
+                            id="password"
+                            type="password"
+                            placeholder="Şifreniz"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="show"
+                            id="showPassword"
+                        >
+                            Göster
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="login"
+                    id="loginButton"
+                >
+                    Giriş Yap
+                </button>
+
+                <div
+                    class="message"
+                    id="message"
+                ></div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+    "https://akfiymgmhoqgebyroath.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_ZRGzrIshym7101FaQeLFXQ_cq0g3jom";
+
+
+const form =
+    document.getElementById("loginForm");
+
+const emailInput =
+    document.getElementById("email");
+
+const passwordInput =
+    document.getElementById("password");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+const message =
+    document.getElementById("message");
+
+const showPassword =
+    document.getElementById("showPassword");
+
+
+showPassword.addEventListener("click",function(){
+
+    if(passwordInput.type === "password"){
+
+        passwordInput.type = "text";
+        showPassword.textContent = "Gizle";
+
+    }else{
+
+        passwordInput.type = "password";
+        showPassword.textContent = "Göster";
+
+    }
+
+});
+
+
+form.addEventListener("submit",async function(e){
+
+    e.preventDefault();
+
+    message.textContent = "";
+
+    loginButton.disabled = true;
+    loginButton.textContent = "Giriş yapılıyor...";
+
+
+    try{
+
+        const email =
+            emailInput.value.trim();
+
+        const password =
+            passwordInput.value;
+
+
+        /* SUPABASE AUTH */
+
+        const authResponse =
+            await fetch(
+                SUPABASE_URL +
+                "/auth/v1/token?grant_type=password",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":"application/json",
+                        "apikey":SUPABASE_KEY
+                    },
+
+                    body:JSON.stringify({
+                        email:email,
+                        password:password
+                    })
+                }
+            );
+
+
+        const authData =
+            await authResponse.json();
+
+
+        if(!authResponse.ok){
+
+            throw new Error(
+                authData.error_description ||
+                authData.message ||
+                "E-posta veya şifre hatalı."
+            );
+
+        }
+
+
+        /* PROFİL */
+
+        const profileResponse =
+            await fetch(
+                SUPABASE_URL +
+                "/rest/v1/profiles" +
+                "?id=eq." +
+                encodeURIComponent(authData.user.id) +
+                "&select=id,full_name,phone,role,job_title,technician_code,active",
+                {
+                    method:"GET",
+
+                    headers:{
+                        "apikey":SUPABASE_KEY,
+
+                        "Authorization":
+                            "Bearer " +
+                            authData.access_token,
+
+                        "Accept":"application/json"
+                    }
+                }
+            );
+
+
+        const profiles =
+            await profileResponse.json();
+
+
+        if(!profileResponse.ok){
+
+            throw new Error(
+                "Profil alınamadı: " +
+                JSON.stringify(profiles)
+            );
+
+        }
+
+
+        if(!profiles.length){
+
+            throw new Error(
+                "Kullanıcı profili bulunamadı."
+            );
+
+        }
+
+
+        const profile =
+            profiles[0];
+
+
+        if(profile.active === false){
+
+            throw new Error(
+                "Bu kullanıcı hesabı pasif."
+            );
+
+        }
+
+
+        /* OTURUMU KAYDET */
+
+        localStorage.setItem(
+            "supabase_session",
+            JSON.stringify({
+
+                access_token:
+                    authData.access_token,
+
+                refresh_token:
+                    authData.refresh_token,
+
+                expires_at:
+                    authData.expires_at,
+
+                user:
+                    authData.user,
+
+                profile:
+                    profile
+
+            })
+        );
+
+
+        /* YÖNLENDİR */
+
+        if(profile.role === "admin"){
+
+            window.location.href =
+                "admin.html";
+
+        }else{
+
+            window.location.href =
+                "technician.html";
+
+        }
+
+
+    }catch(error){
+
+        console.error(error);
+
+        message.textContent =
+            error.message ||
+            "Giriş sırasında hata oluştu.";
+
+    }finally{
+
+        loginButton.disabled = false;
+        loginButton.textContent = "Giriş Yap";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
